@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'maven'
+    id 'org.spongepowered.plugin' version '0.8.1'
+}
+
+
+group = pluginGroup
+version = pluginVersion
+
+sourceCompatibility = targetCompatibility = "1.8"
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "sponge"
+        url = "https://repo.spongepowered.org/maven"
+    }
+}
+
+dependencies {
+    compile "org.spongepowered:spongeapi:7.1.0"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
