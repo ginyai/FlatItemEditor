@@ -93,41 +93,44 @@ public class ArgFactory {
 
     @Nullable
     private static Function<Text, CommandElement> findOf(Class<?> clazz) {
-        MethodHandles.Lookup lookup = MethodHandles.lookup();
         for (Method method : clazz.getMethods()) {
-            try {
-                if ("of".equals(method.getName()) && Modifier.isStatic(method.getModifiers()) && method.getReturnType().equals(clazz)) {
-                    Class<?>[] pTypes = method.getParameterTypes();
-                    MethodHandle methodHandle = lookup.findStatic(clazz, "of", MethodType.methodType(clazz, pTypes));
-                    List<Tuple<CommandElement, Function<CommandContext, Optional<Object>>>> args = Arrays.stream(pTypes).map(TypeToken::of).map(t -> ArgFactory.getter((TypeToken<Object>) t)).collect(Collectors.toList());
-                    return text -> GenericArguments.seq(Stream.concat(args.stream().map(Tuple::getFirst), Stream.of(new SimpleElement(text, methodHandle, args.stream().map(Tuple::getSecond).collect(Collectors.toList())))).toArray(CommandElement[]::new));
-                }
-            } catch (NoSuchMethodException | IllegalAccessException e) {
-                e.printStackTrace();
+            if ("of".equals(method.getName()) && Modifier.isStatic(method.getModifiers()) && method.getReturnType().equals(clazz)) {
+                Class<?>[] pTypes = method.getParameterTypes();
+                List<Tuple<CommandElement, Function<CommandContext, Optional<?>>>> args = Arrays.stream(pTypes).map(TypeToken::of).map(t -> Utils.<Tuple<CommandElement, Function<CommandContext, Optional<?>>>>cast(ArgFactory.getter(t))).collect(Collectors.toList());
+                return text -> GenericArguments.seq(Stream.concat(args.stream().map(Tuple::getFirst), Stream.of(new SimpleElement(text, method, args.stream().map(Tuple::getSecond).collect(Collectors.toList())))).toArray(CommandElement[]::new));
             }
         }
         return null;
     }
 
     private static class SimpleElement extends CommandElement {
-        private MethodHandle methodHandle;
-        private List<Function<CommandContext, Optional<Object>>> args;
+        private Method method;
+        private List<Function<CommandContext, Optional<?>>> args;
 
-        protected SimpleElement(@Nullable Text key, MethodHandle methodHandle, List<Function<CommandContext, Optional<Object>>> args) {
+        protected SimpleElement(@Nullable Text key, Method method, List<Function<CommandContext, Optional<?>>> args) {
             super(key);
-            this.methodHandle = methodHandle;
+            this.method = method;
             this.args = args;
         }
 
         @Override
         public void parse(CommandSource source, CommandArgs args, CommandContext context) throws ArgumentParseException {
             try {
-                methodHandle.invoke(this.args.stream().map(f -> f.apply(context)).map(Optional::get).toArray());
+                Object val = method.invoke(null, this.args.stream().map(f -> f.apply(context)).map(Optional::get).toArray());
+                String key = getUntranslatedKey();
+                if (key != null && val != null) {
+                    if (val instanceof Iterable<?>) {
+                        for (Object ent : ((Iterable<?>) val)) {
+                            context.putArg(key, ent);
+                        }
+                    } else {
+                        context.putArg(key, val);
+                    }
+                }
             } catch (Throwable throwable) {
                 FlatItemEditorPlugin.logger().error("Error", throwable);
                 throw args.createError(Text.of("Error"));
             }
-            super.parse(source, args, context);
         }
 
         @Nullable
