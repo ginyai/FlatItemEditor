@@ -9,7 +9,7 @@ import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 
-@Plugin(id = FlatItemEditorPlugin.PLUGIN_ID, name = FlatItemEditorPlugin.NAME, version = FlatItemEditorPlugin.VERSION)
+@Plugin(id = FlatItemEditorPlugin.PLUGIN_ID, name = FlatItemEditorPlugin.NAME, version = FlatItemEditorPlugin.VERSION, description = "Plugin for editing itemStacks.")
 public class FlatItemEditorPlugin {
     public static final String PLUGIN_ID = "flatitemeditor";
     public static final String NAME = "FlatItemEditor";
