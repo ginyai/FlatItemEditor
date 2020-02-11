@@ -1,4 +1,4 @@
-package dev.ginyai.flatitemeditor;
+package dev.ginyai.flatitemeditor.command.args;
 
 import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.Sponge;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class ArgKey extends CommandElement {
     private Function<CommandContext, Optional<DataHolder>> getDataHolder;
 
-    protected ArgKey(@Nullable Text key, Function<CommandContext, Optional<DataHolder>> getDataHolder) {
+    public ArgKey(@Nullable Text key, Function<CommandContext, Optional<DataHolder>> getDataHolder) {
         super(key);
         this.getDataHolder = getDataHolder;
     }

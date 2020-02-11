@@ -1,23 +1,13 @@
 package dev.ginyai.flatitemeditor;
 
 import com.google.inject.Inject;
+import dev.ginyai.flatitemeditor.command.EditItemCommand;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.data.key.Key;
-import org.spongepowered.api.data.manipulator.DataManipulator;
-import org.spongepowered.api.data.type.HandTypes;
-import org.spongepowered.api.data.value.BaseValue;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
-import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
-
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Plugin(id = FlatItemEditorPlugin.PLUGIN_ID, name = FlatItemEditorPlugin.NAME, version = FlatItemEditorPlugin.VERSION)
 public class FlatItemEditorPlugin {

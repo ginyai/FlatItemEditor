@@ -1,4 +1,4 @@
-package dev.ginyai.flatitemeditor;
+package dev.ginyai.flatitemeditor.command.args;
 
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.ArgumentParseException;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @NonnullByDefault
 public class ArgItemInHand extends CommandElement {
-    protected ArgItemInHand(@Nullable Text key) {
+    public ArgItemInHand(@Nullable Text key) {
         super(key);
     }
 
