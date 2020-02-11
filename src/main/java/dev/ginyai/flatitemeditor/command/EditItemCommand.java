@@ -19,7 +19,7 @@ public class EditItemCommand {
     private static CommandSpec spec;
 
     static {
-        spec = CommandSpec.builder().arguments(
+        spec = CommandSpec.builder().permission("flatitemeditor.command.base").arguments(
                 new ArgItemInHand(Text.of("item")),
                 new ArgKey(Text.of("key"), context -> context.getOne("item")),
                 new ArgValue(Text.of("value"), context -> context.getOne("key"), context -> context.getOne("item"))
